@@ -69,7 +69,10 @@ int main()
 				}
 			}
 		}
-		//cout << Mouse::getPosition(window).x << " " << Mouse::getPosition(window).y << endl;
+		if (button.isClicked())
+		{
+			cout << "lol\n";
+		}
 		button.update(window, camera);
 		window.draw(rect);
 		button.draw(window);

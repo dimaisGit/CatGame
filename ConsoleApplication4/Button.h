@@ -19,6 +19,9 @@ private:
 	Sound onClickSound;
 	bool onHoverSoundWasPlayed;
 	bool onClickSoundWasPlayed;
+	bool isButtonClicked;
+	Clock clickTimer;
+	int clickDelay;
 	Text textForButton;
 	string outString;
 	RectangleShape background;
@@ -26,16 +29,18 @@ private:
 	Color textColor;
 	Color backgroundOnHoverColor;
 	Color textOnHoverColor;
+
+	bool isMouseInArea(const FloatRect& area, const RenderWindow& window, const Camera& camera) const;
 public:
 	void draw(RenderWindow& window) const;
 	void update(const RenderWindow& window, const Camera& camera);
-
+	bool isClicked();
 
 	Button(
 		const Vector2f& position,
 		string outString,
 		short padding = 15,
-		string pathToOnHoverSound = "",
+		string pathToOnHoverSound = "Sounds/onHoverSound.wav",
 		string pathToClickSound = "Sounds/onClickSound.wav",
 		string pathToFont = "Fonts/MeowFont.ttf",
 		short fontSize = 20,

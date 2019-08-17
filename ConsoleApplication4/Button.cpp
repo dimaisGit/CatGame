@@ -22,10 +22,11 @@ Button::Button(
 	this->backgroundOnHoverColor = backgroundOnHoverColor;
 	this->textOnHoverColor = textOnHoverColor;
 	this->onHoverSoundWasPlayed = false;
-	this->onClickSoundWasPlayed = false;
+	this->clickDelay = 400;
+	this->onHoverSoundBuffer.loadFromFile(pathToOnHoverSound);
+	this->onHoverSound = Sound(this->onHoverSoundBuffer);
+	this->isButtonClicked = false;
 
-	//this->onHoverSoundBuffer.loadFromFile(pathToOnHoverSound);
-	//this->onHoverSound = Sound(this->onHoverSoundBuffer);
 
 	this->onClickSoundBuffer.loadFromFile(pathToClickSound);
 	this->onClickSound = Sound(this->onClickSoundBuffer);
@@ -49,24 +50,30 @@ void Button::draw(RenderWindow& window) const
 	window.draw(this->textForButton);
 }
 
+bool Button::isMouseInArea(const FloatRect& area, const RenderWindow& window, const Camera& camera) const
+{
+	return area.contains(Vector2f(
+		Mouse::getPosition(window).x + camera.getCenter().x - camera.getSize().x / 2,
+		Mouse::getPosition(window).y + camera.getCenter().y - camera.getSize().y / 2
+	));
+}
+
 void Button::update(const RenderWindow& window, const Camera& camera)
 {
-	std::cout << background.getGlobalBounds().width << " " << background.getGlobalBounds().height << std::endl;
-	if (background.getGlobalBounds().contains(Vector2f(
-		Mouse::getPosition(window).x + camera.getCenter().x - camera.getSize().x / 2, 
-		Mouse::getPosition(window).y + camera.getCenter().y - camera.getSize().y / 2)))
+	if (isMouseInArea(background.getGlobalBounds(), window, camera))
 	{
 		background.setFillColor(backgroundOnHoverColor);
 		textForButton.setColor(textOnHoverColor);
 		if (!onHoverSoundWasPlayed)
 		{
-			//onHoverSound.play();
+			onHoverSound.play();
 			onHoverSoundWasPlayed = true;
 		}
-		if (Mouse::isButtonPressed(Mouse::Left) && !onClickSoundWasPlayed)
+		if (Mouse::isButtonPressed(Mouse::Left) && clickTimer.getElapsedTime().asMilliseconds() > clickDelay)
 		{
+			isButtonClicked = true;
 			onClickSound.play();
-			onClickSoundWasPlayed = true;
+			clickTimer.restart();
 		}
 
 	}
@@ -76,6 +83,17 @@ void Button::update(const RenderWindow& window, const Camera& camera)
 		background.setFillColor(backgroundColor);
 		textForButton.setColor(textColor);
 	}
+}
+
+bool Button::isClicked()
+{
+	if (isButtonClicked)
+	{
+		isButtonClicked = false;
+		return true;
+	}
+	else
+		return false;
 }
 
 Button::~Button()
