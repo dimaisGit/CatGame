@@ -79,10 +79,27 @@ void Button::update(const RenderWindow& window, const Camera& camera)
 	}
 	else
 	{
-		onHoverSoundWasPlayed = false;
+		if (onHoverSoundWasPlayed)
+		{
+			onHoverSoundWasPlayed = false;
+		}
 		background.setFillColor(backgroundColor);
 		textForButton.setColor(textColor);
 	}
+}
+
+void Button::setCenter(const Camera& camera)
+{
+	std::cout << position.x << std::endl;
+	position.x = camera.getCenter().x - (textForButton.getLocalBounds().width + padding * 2) / 2;
+	setPosition();
+	
+}
+
+void Button::setPosition()
+{
+	textForButton.setPosition(Vector2f(position.x + padding, position.y + padding));
+	background.setPosition(position);
 }
 
 bool Button::isClicked()

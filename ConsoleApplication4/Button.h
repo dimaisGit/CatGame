@@ -30,10 +30,13 @@ private:
 	Color backgroundOnHoverColor;
 	Color textOnHoverColor;
 
+	void setPosition();
 	bool isMouseInArea(const FloatRect& area, const RenderWindow& window, const Camera& camera) const;
 public:
 	void draw(RenderWindow& window) const;
 	void update(const RenderWindow& window, const Camera& camera);
+	void setCenter(const Camera& camera);
+	
 	bool isClicked();
 
 	Button(

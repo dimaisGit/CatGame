@@ -4,13 +4,15 @@ Player::Player()
 	position = Vector2f(50, 100);
 	size = IntRect(0, 0, 50, 50);
 	speed = Vector2f(0, 0);
-	maxSpeed = Vector2f(500, 50);
+	maxSpeed = Vector2f(500, 500);
 	applyingAcceleration = Vector2f(2000, 2000);
 	direction = STAYING;
 	animationState = staying;
 	onGround = false;
 	floor = 500;
 	speedForJump = 600;
+
+	idleTexture.loadFromFile("Sprites/idle.png");
 }
 
 Player::~Player()
@@ -95,8 +97,11 @@ void Player::update(double elapsedTimeAsSeconds)
 		position.y = floor - size.height;
 		onGround = true;
 	}
-	else	
+	else
+	{
 		position.y += speed.y * elapsedTimeAsSeconds;
+		onGround = false;
+	}
 
 }
 

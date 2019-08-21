@@ -31,6 +31,13 @@ private:
 	PlayerDirections direction;
 	AnimationStates animationState;
 
+	Texture idleTexture;
+	Sprite heroSprite;
+
+	double currentFrame;
+	double framesPerSecond;
+	int maxFrame;
+
 	bool onGround;
 	short speedForJump; // jump speed boost
 	int floor;
